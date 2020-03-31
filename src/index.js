@@ -1,17 +1,13 @@
 import "./styles.css";
-import { fromEvent,empty } from "rxjs";
+import { fromEvent,empty,from } from "rxjs";
 import { ajax } from 'rxjs/ajax'
 import { map, debounceTime,filter, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { serialize } from "v8";
 
 
-
-
-
 const input$= document.querySelector("input");
 const result$ = fromEvent(input$,'keyup');
 const results$ = document.getElementById("results")
-
 
 //the Api to Search 
 function searchTerm(term){
@@ -28,14 +24,12 @@ result$.pipe(
   //only if the value has changed
   distinctUntilChanged(),
 //search
-  switchMap(searchTerm)
+  switchMap(searchTerm),
 
-  ).subscribe((r)=>console.log(r
-  ));
+  ).subscribe(console.log); 
 
- 
-
- 
-
-let term = ajax(`https://jsonplaceholder.typicode.com/posts`).pipe()
- //term.subscribe(res =>console.log(res.response))
+//testing postpart
+let term = ajax(`https://jsonplaceholder.typicode.com/posts`).pipe(
+map(x=>x.id)
+)
+ term.subscribe(res =>console.log(res))
